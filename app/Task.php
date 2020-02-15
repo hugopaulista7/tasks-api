@@ -27,4 +27,9 @@ class Task extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeDaily($query)
+    {
+        return $query->orderBy('updated_at', 'DESC');
+    }
 }
