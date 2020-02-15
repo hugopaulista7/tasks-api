@@ -9,7 +9,7 @@ class Task extends Model
     protected $table = 'tasks';
 
     protected $fillable = [
-        'title',
+        'name',
         'description'
     ];
 
@@ -32,4 +32,5 @@ class Task extends Model
     {
         return $query->orderBy('updated_at', 'DESC');
     }
+
 }

@@ -17,7 +17,7 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('status_id');
+            $table->unsignedInteger('status_id')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
 
@@ -29,7 +29,7 @@ class CreateTasksTable extends Migration
 
             $table->foreign('status_id')
                   ->references('id')
-                  ->on('users')
+                  ->on('status')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });

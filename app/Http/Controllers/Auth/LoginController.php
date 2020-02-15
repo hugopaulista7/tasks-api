@@ -49,20 +49,19 @@ class LoginController extends Controller
     public function auth(Request $request)
     {
         $input = $request->only('email', 'password');
-
-
         if (!Auth::attempt($input)) {
-            return response(['message' => 'Usuário ou senha incorretos'], 401);
+            return response()->json(['message' => 'Usuário ou senha incorretos'], 401);
         }
-        $this->authenticateUser($request);
         $user = Auth::user();
-        $response = response($user);
-        return $response->header('Authorization', "Bearer {$user->api_token}");
+        $token = $this->createUserToken($user);
+        $user->api_token = $token;
+
+        return response()->json(['success' => true, 'user' => $user], 200);
 
     }
 
-    public function authenticateUser($request)
+    public function createUserToken($user)
     {
-        return $this->apiTokenController->update($request);
+        return $this->apiTokenController->update($user);
     }
 }

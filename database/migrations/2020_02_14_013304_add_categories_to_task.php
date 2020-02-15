@@ -14,7 +14,7 @@ class AddCategoriesToTask extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('category_id')->nullable();
 
             $table->foreign('category_id')
                   ->references('id')
@@ -32,8 +32,7 @@ class AddCategoriesToTask extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropForeign('category_id');
-            $table->dropColumn('category_id');
+            $table->dropForeign(['category_id']);
         });
     }
 }

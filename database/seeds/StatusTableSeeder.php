@@ -16,6 +16,10 @@ class StatusTableSeeder extends Seeder
             [
                 'name'        => 'Arquivado',
                 'description' => 'Tarefas que foram arquivadas'
+            ],
+            [
+                'name'        => 'Ativo',
+                'description' => 'Tarefas ativas'
             ]
         ];
 

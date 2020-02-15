@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\User;
 
 class ApiTokenController extends Controller
 {
-    public function update(Request $request)
+    public function update(User $user)
     {
         $token = Str::random(60);
+        $user->api_token = $token;
 
-        $request->user()->forceFill([
-            'api_token' => $token
-        ])->save();
+        $user->save();
 
-        return ['api_token' => $token];
+        return $token;
     }
 }
