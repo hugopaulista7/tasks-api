@@ -9,7 +9,7 @@ class Task extends Model
     protected $table = 'tasks';
 
     protected $fillable = [
-        'title',
+        'name',
         'description'
     ];
 
@@ -27,4 +27,10 @@ class Task extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeDaily($query)
+    {
+        return $query->orderBy('updated_at', 'DESC');
+    }
+
 }
