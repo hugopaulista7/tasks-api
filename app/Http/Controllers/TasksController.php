@@ -73,4 +73,11 @@ class TasksController extends Controller
     {
         return $this->getArchiveStatus()->with('tasks')->first()->tasks;
     }
+
+    public function getSingle($id)
+    {
+        $task = (new Task)->where('id', $id)->with(['status', 'category'])->first();
+
+        return response()->json($task, 200);
+    }
 }

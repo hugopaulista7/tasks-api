@@ -13,6 +13,7 @@ Route::group(['middleware' => ['cors']], function ($router) {
 
 
             Route::get('tasks', 'TasksController@get');
+            Route::get('tasks/{id}', 'TasksController@getSingle');
             Route::get('tasks/archived', 'TasksController@getArchived');
             Route::post('tasks/create', 'TasksController@create');
             Route::post('tasks/edit', 'TasksController@edit');
