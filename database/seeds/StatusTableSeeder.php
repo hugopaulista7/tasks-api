@@ -20,6 +20,10 @@ class StatusTableSeeder extends Seeder
             [
                 'name'        => 'Ativo',
                 'description' => 'Tarefas ativas'
+            ],
+            [
+                'name'        => 'Concluído',
+                'description' => 'Tarefas concluídas'
             ]
         ];
 
