@@ -68,4 +68,9 @@ class TasksController extends Controller
     {
         return Status::where('name', 'Ativo')->first();
     }
+
+    public function getArchived()
+    {
+        return $this->getArchiveStatus()->with('tasks')->first()->tasks;
+    }
 }
