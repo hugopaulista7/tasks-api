@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Carbon;
+
 class Task extends Model
 {
     protected $table = 'tasks';
@@ -30,7 +32,18 @@ class Task extends Model
 
     public function scopeDaily($query)
     {
+        // return $query->where('updated_at', Carbon::today())->orderBy('updated_at', 'DESC');
         return $query->orderBy('updated_at', 'DESC');
+    }
+
+    public function scopeGetById($query, $id)
+    {
+        return $query->where('id', $id);
+    }
+
+    public function scopeGetFirstById($query, $id)
+    {
+        return $this->scopeGetById($query, $id)->first();
     }
 
 }

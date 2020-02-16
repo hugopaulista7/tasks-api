@@ -12,7 +12,8 @@ class TasksController extends Controller
     public function get()
     {
         $activeStatus = $this->getActiveStatus();
-        return Task::daily()->where('status_id', $activeStatus->id)->get();
+        $doneStatus = $this->getDoneStatus();
+        return Task::daily()->with('status')->whereIn('status_id', [$activeStatus->id, $doneStatus->id])->get();
     }
 
     public function create(Request $request)
@@ -41,7 +42,7 @@ class TasksController extends Controller
             'description' => 'sometimes'
         ]);
 
-        $task = (new Task)->where('id', $input['id'])->first();
+        $task = (new Task)->with('status')->getFirstById($input['id']);
 
         $task->forceFill($input);
         $task->save();
@@ -51,8 +52,8 @@ class TasksController extends Controller
 
     public function delete($id)
     {
-        $task = (new Task)->where('id', $id)->first();
-        $archive = $this->getArchiveStatus();
+        $task = (new Task)->getFirstById($id);
+        $archive = $this->getArchiveStatus()->first();
         $task->status()->associate($archive);
         $task->save();
 
@@ -61,12 +62,22 @@ class TasksController extends Controller
 
     public function getArchiveStatus()
     {
-        return Status::where('name', 'Arquivado')->first();
+        return Status::where('name', 'Arquivado');
     }
 
     public function getActiveStatus()
     {
         return Status::where('name', 'Ativo')->first();
+    }
+
+    public function getDoneStatus()
+    {
+        return Status::where('name', 'Concluído')->first();
+    }
+
+    public function getStatusByName($name)
+    {
+        return Status::where('name', $name)->first();
     }
 
     public function getArchived()
@@ -76,8 +87,22 @@ class TasksController extends Controller
 
     public function getSingle($id)
     {
-        $task = (new Task)->where('id', $id)->with(['status', 'category'])->first();
+        $task = (new Task)->getById($id)->with(['status', 'category'])->first();
 
         return response()->json($task, 200);
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $input = $request->only('id', 'status_name');
+
+        $status = $this->getStatusByName($input['status_name']);
+
+        $task = Task::getFirstById($input['id']);
+
+        $task->status()->associate($status);
+        $task->save();
+        return response()->json($task, 200);
+
     }
 }
