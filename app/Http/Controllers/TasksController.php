@@ -111,7 +111,10 @@ class TasksController extends Controller
     {
         $today = Carbon::today();
         $archiveStatus = $this->getArchiveStatus()->first();
-        $tasks = (new Task)->where('status_id', '!=', $archiveStatus->id)->orderBy('updated_at', 'DESC')->get();
+        $tasks = (new Task)->where('status_id', '!=', $archiveStatus->id)
+                           ->orderBy('updated_at', 'DESC')
+                           ->with('status')
+                           ->get();
         $response = [];
         foreach ($tasks as $task) {
             $sameDay = $task->updated_at->isSameDay($today);
