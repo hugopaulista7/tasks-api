@@ -32,8 +32,7 @@ class Task extends Model
 
     public function scopeDaily($query)
     {
-        // return $query->where('updated_at', Carbon::today())->orderBy('updated_at', 'DESC');
-        return $query->orderBy('updated_at', 'DESC');
+        return $query->where('updated_at', Carbon::today())->orderBy('updated_at', 'DESC');
     }
 
     public function scopeGetById($query, $id)
