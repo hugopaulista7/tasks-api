@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Task;
 use App\Status;
 
@@ -104,5 +105,20 @@ class TasksController extends Controller
         $task->save();
         return response()->json($task, 200);
 
+    }
+
+    public function getPast()
+    {
+        $today = Carbon::today();
+        $archiveStatus = $this->getArchiveStatus()->first();
+        $tasks = (new Task)->where('status_id', '!=', $archiveStatus->id)->orderBy('updated_at', 'DESC')->get();
+        $response = [];
+        foreach ($tasks as $task) {
+            $sameDay = $task->updated_at->isSameDay($today);
+            if(!$sameDay && $task->updated_at->isPast()) {
+                $response[] = $task;
+            }
+        }
+        return response()->json(['success' => true, 'tasks' => $response], 200);
     }
 }
